@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Finanças">
+<title>Finanças</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --verde: #22c55e; --verde-bg: #f0fdf4; --verde-dark: #16a34a;
+    --vermelho: #ef4444; --vermelho-bg: #fef2f2; --vermelho-dark: #dc2626;
+    --azul: #3b82f6; --azul-bg: #eff6ff; --azul-dark: #1d4ed8;
+    --cinza: #f3f4f6; --borda: #e5e7eb; --texto: #111827; --texto2: #6b7280;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f0f2f5; min-height: 100vh; padding: 20px 16px 40px; }
+  .header { text-align: center; padding: 16px 0 10px; }
+  .header h1 { font-size: 22px; font-weight: 700; color: var(--texto); }
+  .header p  { font-size: 13px; color: var(--texto2); margin-top: 3px; }
+  .dash-link { text-align:center; margin: 8px 0 16px; }
+  .dash-link a { font-size:12px; color:#6b7280; text-decoration:none; padding:6px 14px; border-radius:8px; border:1px solid #e5e7eb; background:white; display:inline-block; }
+  .tipo-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .tipo-btn { padding: 14px 6px; border: 2px solid var(--borda); border-radius: 16px; background: white; cursor: pointer; text-align: center; font-size: 13px; font-weight: 600; color: var(--texto2); -webkit-appearance: none; }
+  .tipo-btn .icone { font-size: 24px; display: block; margin-bottom: 4px; }
+  .tipo-btn.entrada.ativo { border-color: var(--verde); background: var(--verde-bg); color: var(--verde-dark); }
+  .tipo-btn.saida.ativo   { border-color: var(--vermelho); background: var(--vermelho-bg); color: var(--vermelho-dark); }
+  .tipo-btn.aporte.ativo  { border-color: var(--azul); background: var(--azul-bg); color: var(--azul-dark); }
+  .form-card { background: white; border-radius: 20px; padding: 20px 16px; display: none; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .form-card.visivel { display: block; }
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--texto2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  input, select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--borda); border-radius: 12px; font-size: 16px; color: var(--texto); background: var(--cinza); outline: none; -webkit-appearance: none; appearance: none; }
+  input:focus, select:focus { border-color: #6366f1; background: white; }
+  input:disabled, select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+  .select-wrap { position: relative; }
+  .select-wrap::after { content: '›'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%) rotate(90deg); font-size: 20px; color: var(--texto2); pointer-events: none; }
+  .valor-wrap { position: relative; }
+  .valor-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--texto2); font-size: 16px; pointer-events: none; font-weight: 500; }
+  .valor-wrap input { padding-left: 42px; font-weight: 600; font-size: 20px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .total-box { background: var(--azul-bg); border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px 16px; text-align: center; margin-bottom: 14px; }
+  .total-box .total-label { font-size: 11px; font-weight: 600; color: var(--azul-dark); text-transform: uppercase; }
+  .total-box .total-valor { font-size: 24px; font-weight: 700; color: var(--azul-dark); margin-top: 2px; }
+  .btn-enviar { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 6px; color: white; -webkit-appearance: none; }
+  .btn-enviar:active { opacity: 0.85; }
+  .btn-enviar.entrada { background: var(--verde); }
+  .btn-enviar.saida   { background: var(--vermelho); }
+  .btn-enviar.aporte  { background: var(--azul); }
+  .btn-enviar:disabled { background: #d1d5db; }
+  .feedback { display: none; margin-top: 12px; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 500; text-align: center; }
+  .feedback.ok   { background: var(--verde-bg); color: var(--verde-dark); }
+  .feedback.erro { background: var(--vermelho-bg); color: var(--vermelho-dark); }
+  .spinner { display: inline-block; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .auto-badge { display:inline-block; font-size:10px; font-weight:600; color:var(--azul-dark); background:var(--azul-bg); padding:2px 8px; border-radius:6px; margin-left:6px; text-transform:none; letter-spacing:0; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>💰 Lançamento</h1>
+  <p id="data-hoje"></p>
+</div>
+<div class="dash-link"><a href="dashboard.html">📊 Ver dashboard</a></div>
+
+<div class="tipo-group">
+  <button class="tipo-btn entrada" onclick="selecionarTipo('entrada')"><span class="icone">📈</span>Entrada</button>
+  <button class="tipo-btn saida"   onclick="selecionarTipo('saida')"><span class="icone">📉</span>Saída</button>
+  <button class="tipo-btn aporte"  onclick="selecionarTipo('aporte')"><span class="icone">📊</span>Aporte</button>
+</div>
+
+<div class="form-card" id="form-padrao">
+  <div class="form-group"><label id="label-data">Data</label><input type="date" id="data"></div>
+  <div class="form-group">
+    <label id="label-origem">Conta</label>
+    <div class="select-wrap"><select id="conta"><option value="">Selecione...</option></select></div>
+  </div>
+  <div class="form-group">
+    <label>Categoria</label>
+    <div class="select-wrap"><select id="item"><option value="">Selecione...</option></select></div>
+  </div>
+  <div class="form-group">
+    <label>Valor</label>
+    <div class="valor-wrap"><span class="valor-prefix">R$</span><input type="number" id="valor" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+  </div>
+  <div class="form-group"><label>Observação <span style="font-weight:400;text-transform:none">(opcional)</span></label><input type="text" id="obs" placeholder="Ex: Mercado, JHSF3..."></div>
+  <div class="form-group">
+    <label id="label-status">Status</label>
+    <div class="select-wrap"><select id="status"><option value="">Selecione...</option></select></div>
+  </div>
+  <button class="btn-enviar" id="btn-padrao" onclick="lancar()">Lançar</button>
+  <div class="feedback" id="feedback-padrao"></div>
+</div>
+
+<div class="form-card" id="form-aporte">
+  <div class="form-group"><label>Data</label><input type="date" id="a-data"></div>
+  <div class="grid2">
+    <div class="form-group"><label>Classe</label><div class="select-wrap"><select id="a-classe"><option value="">Selecione...</option><option>Ações</option><option>FIIs</option><option>Renda Fixa</option><option>Dólar</option><option>Cripto</option></select></div></div>
+    <div class="form-group"><label>Tipo</label><div class="select-wrap"><select id="a-tipo"><option value="">Selecione...</option><option>Compra</option><option>Venda</option></select></div></div>
+  </div>
+  <div class="form-group"><label>Corretora</label><div class="select-wrap"><select id="a-corretora"><option value="">Selecione...</option><option>Inter</option><option>Clear</option><option>BB</option><option>Mercado Pago</option></select></div></div>
+  <div class="form-group"><label>Ticker</label><input type="text" id="a-ticker" placeholder="Ex: MXRF11, PETR4, BTC..." style="text-transform:uppercase"></div>
+  <div class="grid2">
+    <div class="form-group"><label>Quantidade</label><input type="number" id="a-qtd" inputmode="decimal" step="0.01" min="0" placeholder="0" oninput="calcTotal()"></div>
+    <div class="form-group"><label>Preço Unit.</label><div class="valor-wrap"><span class="valor-prefix">R$</span><input type="number" id="a-preco" inputmode="decimal" step="0.01" min="0" placeholder="0,00" oninput="calcTotal()" style="padding-left:42px;font-size:16px;font-weight:600"></div></div>
+  </div>
+  <div class="total-box"><div class="total-label">Total</div><div class="total-valor" id="a-total">R$ 0,00</div></div>
+  <button class="btn-enviar aporte" id="btn-aporte" onclick="lancarAporte()">📊  Lançar Aporte</button>
+  <div class="feedback" id="feedback-aporte"></div>
+</div>
+
+<script>
+  var APPS_URL = 'https://script.google.com/macros/s/AKfycbwbIJxOtGnTBpUzMuZEs5Tuo6kfxAVKcHvhaNJ6s5MRrYVL_T1cebE4djUuccyaACOzZw/exec';
+  var tipoAtual = '';
+  var origensEntrada = ['Inter','BB','Mercado Pago','Clear','Sofisa','Nubank','Em Mãos'];
+  var origensSaida   = ['Pix','Cartão de Crédito','Em espécie'];
+  var categoriasEntrada = ['Salário PM','Bônus PM','Pessoal','Boa Fitness','Carros APP','Dividendos e JCP de Investimentos'];
+  var categoriasSaida = ['Moradia: Parcelas/Aluguel','Moradia: Luz/Água','Moradia: Internet/Streaming','Moradia: Compras/Manutenção da Casa','Moradia: Faxineira/Serviços Domésticos','Transporte: Parcela do Veículo','Transporte: Combustível','Transporte: Emplacamento/IPVA/Licenciamento','Transporte: Manutenção/Oficina/Lavagem','Transporte: Seguros (Auto/Vida)','Transporte: Uber/Táxi/Ônibus','Alimentação: Mercado/Feira/Panificadora','Alimentação: Lanche da Tia','Alimentação: Comer Fora/Delivery','Cuidados Pessoais: Vestuário/Acessórios','Cuidados Pessoais: Cabelo/Barba/Estética','Saúde: Plano de Saúde','Saúde: Consultas/Exames','Saúde: Farmácia/Medicamentos','Saúde: Academia/Esportes/Suplementos','Desenvolvimento: Cursos/Livros/Educação','Desenvolvimento: Atividades Extras/Serviços','Lazer: Entretenimento/Cinema/Shows','Lazer: Assinaturas/Aplicativos','Lazer: Hobbies/Presentes','Lazer: Viagens/Hospedagem','Diversos: Eletrônicos/Utensílios','Diversos: Impostos/Taxas Bancárias','Carros App: Taxa/ Seguro + Rastreador','Carros App: Manutenção','BoaFitness: Colaboradores','BoaFitness: Energia/Internet'];
+  var statusEntrada = ['Recebido','Projetado'];
+  var statusSaida   = ['Pago','Pendente','Projetado'];
+
+  var hoje = new Date();
+  var dd=String(hoje.getDate()).padStart(2,'0'), mm=String(hoje.getMonth()+1).padStart(2,'0'), yyyy=hoje.getFullYear();
+  document.getElementById('data').value = document.getElementById('a-data').value = yyyy+'-'+mm+'-'+dd;
+  document.getElementById('data-hoje').textContent = dd+'/'+mm+'/'+yyyy;
+
+  function jsonp(params, ok, err) {
+    var cb = 'cb_'+Date.now();
+    var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
+    var t  = setTimeout(function(){ cleanup(cb); err('Tempo esgotado.'); }, 15000);
+    window[cb] = function(d){ clearTimeout(t); cleanup(cb); ok(d); };
+    var s = document.createElement('script');
+    s.id  = cb; s.src = APPS_URL+'?'+qs+'&callback='+cb;
+    s.onerror = function(){ clearTimeout(t); cleanup(cb); err('Erro de conexão.'); };
+    document.head.appendChild(s);
+  }
+  function cleanup(cb){ delete window[cb]; var s=document.getElementById(cb); if(s) document.head.removeChild(s); }
+
+  function popularSelect(id, lista) {
+    var sel = document.getElementById(id);
+    sel.innerHTML = '<option value="">Selecione...</option>';
+    lista.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); });
+  }
+
+  function calcularFatura(ds) {
+    var p=ds.split('-'), a=parseInt(p[0]), m=parseInt(p[1])-1, d=parseInt(p[2]);
+    var mF=(d<=28)?m+1:m+2, aF=a;
+    if(mF>11){aF+=Math.floor(mF/12);mF=mF%12;}
+    var df=new Date(aF,mF,5);
+    return String(df.getDate()).padStart(2,'0')+'/'+String(df.getMonth()+1).padStart(2,'0')+'/'+df.getFullYear();
+  }
+
+  function atualizarCartao() {
+    var conta=document.getElementById('conta').value;
+    var st=document.getElementById('status'), ld=document.getElementById('label-data'), ls=document.getElementById('label-status');
+    var dv=document.getElementById('data').value;
+    if(tipoAtual==='saida' && conta==='Cartão de Crédito'){
+      st.value='Projetado'; st.disabled=true;
+      ls.innerHTML='Status <span class="auto-badge">Automático</span>';
+      ld.innerHTML='Data da Compra'+(dv?' <span class="auto-badge">Fatura: '+calcularFatura(dv)+'</span>':'');
+    } else {
+      st.disabled=false; ls.textContent='Status'; ld.textContent='Data';
+    }
+  }
+  document.getElementById('conta').addEventListener('change', atualizarCartao);
+  document.getElementById('data').addEventListener('change',  atualizarCartao);
+
+  function selecionarTipo(tipo) {
+    tipoAtual=tipo;
+    document.querySelectorAll('.tipo-btn').forEach(function(b){b.classList.remove('ativo');});
+    document.querySelector('.tipo-btn.'+tipo).classList.add('ativo');
+    document.getElementById('form-padrao').classList.remove('visivel');
+    document.getElementById('form-aporte').classList.remove('visivel');
+    if(tipo==='aporte'){document.getElementById('form-aporte').classList.add('visivel');return;}
+    document.getElementById('label-origem').textContent=tipo==='entrada'?'Conta':'Origem do Pagamento';
+    popularSelect('conta',  tipo==='entrada'?origensEntrada:origensSaida);
+    popularSelect('item',   tipo==='entrada'?categoriasEntrada:categoriasSaida);
+    popularSelect('status', tipo==='entrada'?statusEntrada:statusSaida);
+    document.getElementById('status').disabled=false;
+    document.getElementById('label-status').textContent='Status';
+    document.getElementById('label-data').textContent='Data';
+    var btn=document.getElementById('btn-padrao');
+    btn.className='btn-enviar '+tipo;
+    btn.textContent=tipo==='entrada'?'📈  Lançar Entrada':'📉  Lançar Saída';
+    document.getElementById('form-padrao').classList.add('visivel');
+  }
+
+  function lancar() {
+    var data=document.getElementById('data').value, item=document.getElementById('item').value,
+        valor=document.getElementById('valor').value, obs=document.getElementById('obs').value,
+        status=document.getElementById('status').value, conta=document.getElementById('conta').value;
+    if(!data||!item||!valor||!status||!conta){mostrarFeedback('feedback-padrao','Preencha todos os campos.',false);return;}
+    var btn=document.getElementById('btn-padrao');
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Lançando...';
+    jsonp({tipo:tipoAtual,data:data,item:item,valor:valor,obs:obs,status:status,conta:conta},
+      function(r){
+        btn.disabled=false; btn.textContent=tipoAtual==='entrada'?'📈  Lançar Entrada':'📉  Lançar Saída';
+        if(r.ok){mostrarFeedback('feedback-padrao','✅ Lançado com sucesso!',true);limparPadrao();}
+        else{mostrarFeedback('feedback-padrao','❌ Erro: '+r.msg,false);}
+      },
+      function(e){btn.disabled=false;btn.textContent=tipoAtual==='entrada'?'📈  Lançar Entrada':'📉  Lançar Saída';mostrarFeedback('feedback-padrao','❌ '+e,false);}
+    );
+  }
+
+  function lancarAporte() {
+    var data=document.getElementById('a-data').value, classe=document.getElementById('a-classe').value,
+        tipo=document.getElementById('a-tipo').value, corretora=document.getElementById('a-corretora').value,
+        ticker=document.getElementById('a-ticker').value.toUpperCase(),
+        qtd=document.getElementById('a-qtd').value, preco=document.getElementById('a-preco').value;
+    if(!data||!classe||!tipo||!corretora||!ticker||!qtd||!preco){mostrarFeedback('feedback-aporte','Preencha todos os campos.',false);return;}
+    var btn=document.getElementById('btn-aporte');
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Lançando...';
+    jsonp({tipo:'aporte',data:data,classe:classe,aporte_tipo:tipo,corretora:corretora,ticker:ticker,qtd:qtd,preco:preco},
+      function(r){btn.disabled=false;btn.textContent='📊  Lançar Aporte';if(r.ok){mostrarFeedback('feedback-aporte','✅ Aporte lançado!',true);limparAporte();}else{mostrarFeedback('feedback-aporte','❌ Erro: '+r.msg,false);}},
+      function(e){btn.disabled=false;btn.textContent='📊  Lançar Aporte';mostrarFeedback('feedback-aporte','❌ '+e,false);}
+    );
+  }
+
+  function calcTotal(){
+    var q=parseFloat(document.getElementById('a-qtd').value)||0, p=parseFloat(document.getElementById('a-preco').value)||0;
+    document.getElementById('a-total').textContent='R$ '+(q*p).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function mostrarFeedback(id,msg,ok){
+    var el=document.getElementById(id); el.textContent=msg; el.className='feedback '+(ok?'ok':'erro');
+    el.style.display='block'; if(ok) setTimeout(function(){el.style.display='none';},3000);
+  }
+  function limparPadrao(){
+    ['item','valor','obs','conta'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('status').value=''; document.getElementById('status').disabled=false;
+    document.getElementById('label-status').textContent='Status'; document.getElementById('label-data').textContent='Data';
+  }
+  function limparAporte(){
+    ['a-classe','a-tipo','a-corretora','a-ticker','a-qtd','a-preco'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('a-total').textContent='R$ 0,00';
+  }
+</script>
+</body>
+</html>
