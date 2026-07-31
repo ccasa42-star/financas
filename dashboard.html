@@ -158,17 +158,26 @@
 
     // Gráfico barras
     var maxVal = 1;
-    proj.forEach(function(m){ maxVal = Math.max(maxVal, m.receita||0, m.gasto||0); });
+    proj.forEach(function(m){ if((m.receita||0)>0||(m.gasto||0)>0) maxVal = Math.max(maxVal, m.receita||0, m.gasto||0); });
 
-    var barrasHTML = proj.map(function(m, i) {
+    // Filtra só meses com dados ou projeção (ignora zeros no início do ano)
+    var primeiroMesComDado = 0;
+    for (var pi=0; pi<proj.length; pi++) {
+      if ((proj[pi].receita||0) > 0 || (proj[pi].gasto||0) > 0) { primeiroMesComDado = pi; break; }
+    }
+    var projVis = proj.slice(primeiroMesComDado);
+
+    var barrasHTML = projVis.map(function(m, idx) {
+      var i = primeiroMesComDado + idx;
       var hR = Math.round(((m.receita||0)/maxVal)*100);
       var hG = Math.round(((m.gasto||0)/maxVal)*100);
       var atual = (i === mesAtual);
       var real  = m.real;
+      var temDado = (m.receita||0)>0 || (m.gasto||0)>0;
       return '<div class="bar-col">'
         +'<div class="bar-pair">'
-          +'<div class="bar '+(real?'bar-r':'bar-rp')+'" style="height:'+Math.max(hR,2)+'%"></div>'
-          +'<div class="bar '+(real?'bar-g':'bar-gp')+'" style="height:'+Math.max(hG,2)+'%"></div>'
+          +'<div class="bar '+(real?'bar-r':'bar-rp')+'" style="height:'+Math.max(hR, temDado?2:0)+'%"></div>'
+          +'<div class="bar '+(real?'bar-g':'bar-gp')+'" style="height:'+Math.max(hG, temDado?2:0)+'%"></div>'
         +'</div>'
         +'<div class="bar-mes'+(atual?' atual':'')+'">'+(atual?'▾':'')+MESES[i].substring(0,1)+'</div>'
       +'</div>';
