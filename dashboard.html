@@ -8,102 +8,71 @@
 <title>Dashboard Financeiro</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
   :root {
-    --bg:      #0d0f1a;
-    --bg2:     #151824;
-    --bg3:     #1e2235;
-    --verde:   #00d67e;
-    --vdim:    rgba(0,214,126,0.12);
-    --vbord:   rgba(0,214,126,0.3);
-    --verm:    #ff4f6b;
-    --rdim:    rgba(255,79,107,0.12);
-    --rbord:   rgba(255,79,107,0.3);
-    --azul:    #4f8fff;
-    --adim:    rgba(79,143,255,0.12);
-    --amar:    #ffc542;
-    --texto:   #e8eaff;
-    --texto2:  #6b7399;
-    --borda:   rgba(255,255,255,0.06);
+    --bg:#0d0f1a; --bg2:#151824; --bg3:#1e2235;
+    --verde:#00d67e; --vdim:rgba(0,214,126,0.12); --vbord:rgba(0,214,126,0.3);
+    --verm:#ff4f6b; --rdim:rgba(255,79,107,0.12); --rbord:rgba(255,79,107,0.3);
+    --azul:#4f8fff; --adim:rgba(79,143,255,0.12);
+    --amar:#ffc542;
+    --texto:#e8eaff; --texto2:#6b7399; --borda:rgba(255,255,255,0.06);
   }
-  body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--texto); min-height:100vh; padding:0 0 60px; }
+  body { font-family:'Inter',-apple-system,sans-serif; background:var(--bg); color:var(--texto); min-height:100vh; padding-bottom:60px; }
 
-  /* Header */
   .topbar { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--borda); }
-  .back { color:var(--texto2); text-decoration:none; font-size:13px; font-weight:500; display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:10px; border:1px solid var(--borda); background:var(--bg2); }
+  .back { color:var(--texto2); text-decoration:none; font-size:13px; font-weight:500; padding:8px 14px; border-radius:10px; border:1px solid var(--borda); background:var(--bg2); }
   .topbar-title { font-size:15px; font-weight:700; }
   .mes-badge { font-size:12px; color:var(--azul); font-weight:600; background:var(--adim); padding:4px 12px; border-radius:20px; }
 
-  .container { padding:0 16px; max-width:600px; margin:0 auto; }
+  .container { padding:0 16px; max-width:640px; margin:0 auto; }
   .section { margin-top:20px; }
   .section-label { font-size:11px; font-weight:700; color:var(--texto2); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
 
-  /* Cards resultado */
-  .resultado-card {
-    background:linear-gradient(135deg,#0f1f3a 0%,#0d1520 100%);
-    border:1px solid var(--azul);
-    border-radius:20px; padding:20px; margin-bottom:12px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
+  /* Cards topo */
+  .resultado-card { background:linear-gradient(135deg,#0f1f3a,#0d1520); border:1px solid var(--azul); border-radius:20px; padding:20px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
   .resultado-label { font-size:11px; font-weight:600; color:var(--texto2); text-transform:uppercase; letter-spacing:0.8px; }
   .resultado-valor { font-size:32px; font-weight:800; letter-spacing:-1px; margin-top:6px; }
   .badge { padding:5px 14px; border-radius:100px; font-size:12px; font-weight:700; }
   .badge-pos { background:var(--vdim); color:var(--verde); }
   .badge-neg { background:var(--rdim); color:var(--verm); }
-
   .cards2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
   .card { background:var(--bg2); border:1px solid var(--borda); border-radius:16px; padding:16px; }
   .card-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
   .card-val { font-size:20px; font-weight:800; letter-spacing:-0.5px; }
   .card-sub { font-size:11px; color:var(--texto2); margin-top:4px; }
-  .c-verde { color:var(--verde); }
-  .c-verm  { color:var(--verm); }
-  .c-azul  { color:var(--azul); }
-  .c-amar  { color:var(--amar); }
+  .c-verde{color:var(--verde);} .c-verm{color:var(--verm);} .c-azul{color:var(--azul);}
 
-  /* Gráfico projeção */
-  .graf-card { background:var(--bg2); border:1px solid var(--borda); border-radius:20px; padding:20px 16px 12px; margin-bottom:12px; }
-  .graf-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
-  .graf-titulo { font-size:14px; font-weight:700; }
-  .graf-sub { font-size:11px; color:var(--texto2); margin-top:2px; }
-  .legenda { display:flex; gap:12px; }
-  .leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--texto2); font-weight:600; }
-  .leg-dot { width:8px; height:8px; border-radius:50%; }
+  /* Card gráfico */
+  .graf-card { background:var(--bg2); border:1px solid var(--borda); border-radius:20px; padding:18px 16px 14px; margin-bottom:14px; }
+  .graf-titulo { font-size:13px; font-weight:700; margin-bottom:4px; }
+  .graf-sub { font-size:11px; color:var(--texto2); margin-bottom:14px; }
 
-  .graf-area { display:flex; align-items:flex-end; gap:4px; height:110px; padding-top:8px; }
-  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; height:100%; justify-content:flex-end; }
-  .bar-pair { display:flex; gap:2px; align-items:flex-end; width:100%; }
-  .bar { flex:1; border-radius:3px 3px 0 0; min-height:2px; }
-  .bar-r { background:var(--verde); }
-  .bar-g { background:var(--verm); }
-  .bar-rp { background:transparent; border:1px dashed var(--verde); border-bottom:none; }
-  .bar-gp { background:transparent; border:1px dashed var(--verm); border-bottom:none; }
-  .bar-mes { font-size:8px; color:var(--texto2); font-weight:700; text-transform:uppercase; margin-top:5px; }
-  .bar-mes.atual { color:var(--azul); }
+  /* SVG Charts */
+  svg.chart { width:100%; overflow:visible; }
+  .axis-label { font-size:9px; fill:var(--texto2); font-family:'Inter',sans-serif; }
+  .grid-line { stroke:rgba(255,255,255,0.05); stroke-width:1; }
+  .bar-rect { rx:3; }
+  .tooltip-box { background:var(--bg3); border:1px solid var(--borda); border-radius:8px; padding:6px 10px; font-size:12px; pointer-events:none; position:absolute; display:none; white-space:nowrap; }
 
-  /* Ranking gastos/receitas */
-  .rank-card { background:var(--bg2); border:1px solid var(--borda); border-radius:20px; overflow:hidden; margin-bottom:12px; }
-  .rank-header { padding:14px 16px 10px; border-bottom:1px solid var(--borda); display:flex; justify-content:space-between; align-items:center; }
+  /* Ranking */
+  .rank-card { background:var(--bg2); border:1px solid var(--borda); border-radius:20px; overflow:hidden; margin-bottom:14px; }
+  .rank-header { padding:14px 16px 10px; border-bottom:1px solid var(--borda); display:flex; justify-content:space-between; }
   .rank-titulo { font-size:13px; font-weight:700; }
   .rank-total { font-size:12px; font-weight:600; color:var(--texto2); }
-  .rank-row { padding:10px 16px; border-bottom:1px solid var(--borda); display:flex; align-items:center; gap:10px; }
+  .rank-row { padding:9px 16px; border-bottom:1px solid var(--borda); display:flex; align-items:center; gap:8px; }
   .rank-row:last-child { border-bottom:none; }
   .rank-num { font-size:11px; font-weight:700; color:var(--texto2); width:16px; text-align:center; flex-shrink:0; }
-  .rank-info { flex:1; min-width:0; }
-  .rank-nome { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .rank-bar-wrap { flex:1; height:4px; background:var(--borda); border-radius:4px; overflow:hidden; }
+  .rank-nome { font-size:12px; font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rank-bar-wrap { width:60px; height:4px; background:var(--borda); border-radius:4px; overflow:hidden; flex-shrink:0; }
   .rank-bar-fill { height:100%; border-radius:4px; }
-  .rank-val { font-size:12px; font-weight:700; width:70px; text-align:right; flex-shrink:0; }
+  .rank-val { font-size:12px; font-weight:700; width:72px; text-align:right; flex-shrink:0; }
 
-  /* Loading / Erro */
   .loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:80px 0; gap:14px; }
   .spin { width:28px; height:28px; border:2.5px solid var(--borda); border-top-color:var(--azul); border-radius:50%; animation:spin 0.8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes spin { to{transform:rotate(360deg);} }
   .loading p { font-size:13px; color:var(--texto2); }
   .erro-box { background:var(--rdim); border:1px solid var(--rbord); border-radius:14px; padding:16px; text-align:center; font-size:13px; color:var(--verm); margin:20px 0; }
   .updated { text-align:center; font-size:11px; color:var(--texto2); margin-top:16px; }
-
-  .divider { height:1px; background:var(--borda); margin:4px 0; }
 </style>
 </head>
 <body>
@@ -114,6 +83,7 @@
   <span class="mes-badge" id="mes-badge">—</span>
 </div>
 
+<div id="tooltip" class="tooltip-box"></div>
 <div class="container">
   <div id="conteudo">
     <div class="loading"><div class="spin"></div><p>Carregando dados...</p></div>
@@ -121,162 +91,241 @@
 </div>
 
 <script>
-  var APPS_URL = 'https://script.google.com/macros/s/AKfycbwbIJxOtGnTBpUzMuZEs5Tuo6kfxAVKcHvhaNJ6s5MRrYVL_T1cebE4djUuccyaACOzZw/exec';
-  var MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var APPS_URL = 'https://script.google.com/macros/s/AKfycbwbIJxOtGnTBpUzMuZEs5Tuo6kfxAVKcHvhaNJ6s5MRrYVL_T1cebE4djUuccyaACOzZw/exec';
+var MESES     = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+var MESES_FULL= ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var hoje = new Date(), mesAtual = hoje.getMonth(), anoAtual = hoje.getFullYear();
+document.getElementById('mes-badge').textContent = MESES[mesAtual]+' '+anoAtual;
 
-  var hoje     = new Date();
-  var mesAtual = hoje.getMonth();
-  var anoAtual = hoje.getFullYear();
+function fmt(v){ return 'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtK(v){ return v>=1000?'R$'+(v/1000).toFixed(0)+'k':'R$'+v.toFixed(0); }
 
-  document.getElementById('mes-badge').textContent = MESES[mesAtual] + ' ' + anoAtual;
+function jsonp(params,ok,err){
+  var cb='cb_'+Date.now();
+  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+  var t=setTimeout(function(){cleanup(cb);err('Tempo esgotado.');},20000);
+  window[cb]=function(d){clearTimeout(t);cleanup(cb);ok(d);};
+  var s=document.createElement('script');s.id=cb;s.src=APPS_URL+'?'+qs+'&callback='+cb;
+  s.onerror=function(){clearTimeout(t);cleanup(cb);err('Erro de conexão.');};
+  document.head.appendChild(s);
+}
+function cleanup(cb){delete window[cb];var s=document.getElementById(cb);if(s)document.head.removeChild(s);}
 
-  function fmt(v) {
-    return 'R$ ' + Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+// ── SVG BAR CHART ──────────────────────────────────────────────
+function barChart(items, colorFn, labelKey, valKey) {
+  var W=320, H=140, padL=36, padB=28, padT=10, padR=8;
+  var cW=W-padL-padR, cH=H-padT-padB;
+  var maxV = Math.max.apply(null, items.map(function(it){return it[valKey];})) || 1;
+  var barW = Math.floor(cW/items.length) - 4;
+
+  var gridLines='', bars='', labels='', yLabels='';
+  var steps=4;
+  for(var s=0;s<=steps;s++){
+    var yv=maxV*(s/steps);
+    var yp=padT+cH-Math.round(cH*(s/steps));
+    gridLines+='<line class="grid-line" x1="'+padL+'" y1="'+yp+'" x2="'+(W-padR)+'" y2="'+yp+'"/>';
+    yLabels+='<text class="axis-label" x="'+(padL-4)+'" y="'+(yp+3)+'" text-anchor="end">'+fmtK(yv)+'</text>';
   }
 
-  function jsonp(params, ok, err) {
-    var cb = 'cb_' + Date.now();
-    var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
-    var t  = setTimeout(function(){ cleanup(cb); err('Tempo esgotado — verifique sua conexão.'); }, 20000);
-    window[cb] = function(d){ clearTimeout(t); cleanup(cb); ok(d); };
-    var s = document.createElement('script');
-    s.id  = cb; s.src = APPS_URL+'?'+qs+'&callback='+cb;
-    s.onerror = function(){ clearTimeout(t); cleanup(cb); err('Erro de conexão com o servidor.'); };
-    document.head.appendChild(s);
-  }
-  function cleanup(cb){ delete window[cb]; var s=document.getElementById(cb); if(s) document.head.removeChild(s); }
+  items.forEach(function(it,i){
+    var bh = Math.max(2, Math.round(cH*(it[valKey]/maxV)));
+    var bx = padL + i*(barW+4) + 2;
+    var by = padT + cH - bh;
+    var col = typeof colorFn==='string'?colorFn:colorFn(it,i);
+    var shortLabel = it[labelKey].split(':').pop().trim().substring(0,8);
+    bars += '<rect class="bar-rect" x="'+bx+'" y="'+by+'" width="'+barW+'" height="'+bh+'" fill="'+col+'" opacity="0.85"'
+          +' data-label="'+it[labelKey]+'" data-val="'+fmt(it[valKey])+'" onmouseover="showTip(event,this)" onmouseout="hideTip()"/>';
+    labels+='<text class="axis-label" x="'+(bx+barW/2)+'" y="'+(H-10)+'" text-anchor="middle" transform="rotate(-35,'+(bx+barW/2)+','+(H-10)+')">'+shortLabel+'</text>';
+  });
 
-  function renderDashboard(d) {
-    var receita  = d.receita  || 0;
-    var gasto    = d.gasto    || 0;
-    var resultado = receita - gasto;
-    var pos      = resultado >= 0;
-    var proj     = d.projecao || [];
-    var topGastos   = d.topGastos   || [];
-    var topReceitas = d.topReceitas || [];
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'
+    +gridLines+yLabels+bars+labels+'</svg>';
+}
 
-    // Gráfico barras
-    var maxVal = 1;
-    proj.forEach(function(m){ if((m.receita||0)>0||(m.gasto||0)>0) maxVal = Math.max(maxVal, m.receita||0, m.gasto||0); });
+// ── SVG LINE CHART ──────────────────────────────────────────────
+function lineChart(proj) {
+  var visible = [];
+  var first=0;
+  for(var i=0;i<proj.length;i++){if((proj[i].receita||0)>0||(proj[i].gasto||0)>0){first=i;break;}}
+  for(var i=first;i<proj.length;i++) visible.push({mes:i, r:proj[i].receita||0, g:proj[i].gasto||0, real:proj[i].real});
 
-    // Filtra só meses com dados ou projeção (ignora zeros no início do ano)
-    var primeiroMesComDado = 0;
-    for (var pi=0; pi<proj.length; pi++) {
-      if ((proj[pi].receita||0) > 0 || (proj[pi].gasto||0) > 0) { primeiroMesComDado = pi; break; }
-    }
-    var projVis = proj.slice(primeiroMesComDado);
+  var W=320,H=140,padL=36,padB=28,padT=10,padR=8;
+  var cW=W-padL-padR, cH=H-padT-padB;
+  var maxV=1;
+  visible.forEach(function(v){maxV=Math.max(maxV,v.r,v.g);});
 
-    var barrasHTML = projVis.map(function(m, idx) {
-      var i = primeiroMesComDado + idx;
-      var hR = Math.round(((m.receita||0)/maxVal)*100);
-      var hG = Math.round(((m.gasto||0)/maxVal)*100);
-      var atual = (i === mesAtual);
-      var real  = m.real;
-      var temDado = (m.receita||0)>0 || (m.gasto||0)>0;
-      return '<div class="bar-col">'
-        +'<div class="bar-pair">'
-          +'<div class="bar '+(real?'bar-r':'bar-rp')+'" style="height:'+Math.max(hR, temDado?2:0)+'%"></div>'
-          +'<div class="bar '+(real?'bar-g':'bar-gp')+'" style="height:'+Math.max(hG, temDado?2:0)+'%"></div>'
-        +'</div>'
-        +'<div class="bar-mes'+(atual?' atual':'')+'">'+(atual?'▾':'')+MESES[i].substring(0,1)+'</div>'
-      +'</div>';
-    }).join('');
+  var stepX = cW/(visible.length-1||1);
 
-    // Top gastos
-    var maxG = topGastos.length > 0 ? topGastos[0].valor : 1;
-    var gastosHTML = topGastos.map(function(item, i){
-      var pct = Math.round((item.valor/maxG)*100);
-      return '<div class="rank-row">'
-        +'<div class="rank-num">'+(i+1)+'</div>'
-        +'<div class="rank-info"><div class="rank-nome">'+item.cat+'</div></div>'
-        +'<div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:'+pct+'%;background:var(--verm)"></div></div>'
-        +'<div class="rank-val c-verm">'+fmt(item.valor)+'</div>'
-      +'</div>';
-    }).join('');
-
-    // Top receitas
-    var maxR = topReceitas.length > 0 ? topReceitas[0].valor : 1;
-    var receitasHTML = topReceitas.map(function(item, i){
-      var pct = Math.round((item.valor/maxR)*100);
-      return '<div class="rank-row">'
-        +'<div class="rank-num">'+(i+1)+'</div>'
-        +'<div class="rank-info"><div class="rank-nome">'+item.cat+'</div></div>'
-        +'<div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:'+pct+'%;background:var(--verde)"></div></div>'
-        +'<div class="rank-val c-verde">'+fmt(item.valor)+'</div>'
-      +'</div>';
-    }).join('');
-
-    document.getElementById('conteudo').innerHTML =
-
-      // Resultado
-      '<div class="section">'
-      +'<div class="resultado-card">'
-        +'<div>'
-          +'<div class="resultado-label">Resultado — '+MESES_FULL[mesAtual]+'</div>'
-          +'<div class="resultado-valor '+(pos?'c-verde':'c-verm')+'">'+fmt(resultado)+'</div>'
-        +'</div>'
-        +'<div class="badge '+(pos?'badge-pos':'badge-neg')+'">'+(pos?'▲ Superávit':'▼ Déficit')+'</div>'
-      +'</div>'
-
-      // Cards receita / gasto
-      +'<div class="cards2">'
-        +'<div class="card"><div class="card-label c-verde">Receitas</div><div class="card-val c-verde">'+fmt(receita)+'</div><div class="card-sub">mês atual</div></div>'
-        +'<div class="card"><div class="card-label c-verm">Gastos</div><div class="card-val c-verm">'+fmt(gasto)+'</div><div class="card-sub">mês atual</div></div>'
-      +'</div>'
-      +'</div>'
-
-      // Projeção
-      +'<div class="section">'
-      +'<div class="section-label">Projeção '+anoAtual+'</div>'
-      +'<div class="graf-card">'
-        +'<div class="graf-header">'
-          +'<div><div class="graf-titulo">Receitas vs Gastos</div><div class="graf-sub">Barras tracejadas = projeção pela média</div></div>'
-          +'<div class="legenda">'
-            +'<div class="leg-item"><div class="leg-dot" style="background:var(--verde)"></div>Receita</div>'
-            +'<div class="leg-item"><div class="leg-dot" style="background:var(--verm)"></div>Gasto</div>'
-          +'</div>'
-        +'</div>'
-        +'<div class="graf-area">'+barrasHTML+'</div>'
-      +'</div>'
-      +'</div>'
-
-      // Maiores gastos
-      +'<div class="section">'
-      +'<div class="section-label">Maiores gastos do mês</div>'
-      +'<div class="rank-card">'
-        +'<div class="rank-header"><span class="rank-titulo">Por categoria</span><span class="rank-total c-verm">'+fmt(gasto)+' total</span></div>'
-        + gastosHTML
-      +'</div>'
-      +'</div>'
-
-      // Maiores receitas
-      +'<div class="section">'
-      +'<div class="section-label">Maiores receitas do mês</div>'
-      +'<div class="rank-card">'
-        +'<div class="rank-header"><span class="rank-titulo">Por categoria</span><span class="rank-total c-verde">'+fmt(receita)+' total</span></div>'
-        + receitasHTML
-      +'</div>'
-      +'</div>'
-
-      +'<div class="updated">Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</div>';
+  var gridLines='',yLabels='',lineR='',lineG='',dotsR='',dotsG='',xLabels='',area='';
+  var steps=4;
+  for(var s=0;s<=steps;s++){
+    var yv=maxV*(s/steps), yp=padT+cH-Math.round(cH*(s/steps));
+    gridLines+='<line class="grid-line" x1="'+padL+'" y1="'+yp+'" x2="'+(W-padR)+'" y2="'+yp+'"/>';
+    yLabels+='<text class="axis-label" x="'+(padL-4)+'" y="'+(yp+3)+'" text-anchor="end">'+fmtK(yv)+'</text>';
   }
 
-  function renderErro(msg) {
-    document.getElementById('conteudo').innerHTML = '<div class="erro-box">❌ '+msg+'</div>';
-  }
+  var ptsR=[], ptsG=[];
+  visible.forEach(function(v,idx){
+    var x=padL+idx*stepX;
+    var yr=padT+cH-Math.round(cH*(v.r/maxV));
+    var yg=padT+cH-Math.round(cH*(v.g/maxV));
+    ptsR.push([x,yr,v.real]);
+    ptsG.push([x,yg,v.real]);
+    xLabels+='<text class="axis-label" x="'+x+'" y="'+(H-10)+'" text-anchor="middle">'+MESES[v.mes].substring(0,1)+(v.mes===mesAtual?'●':'')+'</text>';
+  });
 
-  jsonp(
-    { tipo:'dashboard', data: anoAtual+'-'+String(mesAtual+1).padStart(2,'0')+'-01' },
-    function(resp) {
-      if (resp.ok && resp.dados) {
-        renderDashboard(resp.dados);
-      } else {
-        renderErro(resp.msg || 'Não foi possível carregar os dados.');
+  function makeLine(pts, color) {
+    var d='';
+    pts.forEach(function(p,i){
+      if(i===0) d='M'+p[0]+','+p[1];
+      else {
+        var prev=pts[i-1];
+        var mx=(p[0]+prev[0])/2;
+        d+=' C'+mx+','+prev[1]+' '+mx+','+p[1]+' '+p[0]+','+p[1];
       }
-    },
-    function(err) { renderErro(err); }
-  );
+    });
+    // Linha sólida para real, tracejada para projeção
+    var solidEnd = 0;
+    for(var i=0;i<pts.length;i++){if(!pts[i][2]){solidEnd=i;break;}solidEnd=i+1;}
+
+    var svgLines='';
+    if(solidEnd>0){
+      var dSolid='';
+      pts.slice(0,solidEnd).forEach(function(p,i){
+        if(i===0) dSolid='M'+p[0]+','+p[1];
+        else {var prev=pts[i-1];var mx=(p[0]+prev[0])/2;dSolid+=' C'+mx+','+prev[1]+' '+mx+','+p[1]+' '+p[0]+','+p[1];}
+      });
+      svgLines+='<path d="'+dSolid+'" stroke="'+color+'" stroke-width="2.5" fill="none" opacity="0.9"/>';
+    }
+    if(solidEnd<pts.length){
+      var dDash='';
+      pts.slice(solidEnd-1).forEach(function(p,i){
+        if(i===0) dDash='M'+p[0]+','+p[1];
+        else {var prev=pts[i+(solidEnd-1)-1]||pts[solidEnd-1];var mx=(p[0]+prev[0])/2;dDash+=' C'+mx+','+prev[1]+' '+mx+','+p[1]+' '+p[0]+','+p[1];}
+      });
+      svgLines+='<path d="'+dDash+'" stroke="'+color+'" stroke-width="1.5" fill="none" stroke-dasharray="5,3" opacity="0.6"/>';
+    }
+    pts.forEach(function(p,i){
+      svgLines+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(p[2]?3:2)+'" fill="'+color+'" opacity="'+(p[2]?1:0.5)+'"'
+        +' data-label="'+MESES[visible[i].mes]+'" data-val="'+fmt(p[2]?visible[i].r:visible[i].g)+'" onmouseover="showTip(event,this)" onmouseout="hideTip()"/>';
+    });
+    return svgLines;
+  }
+
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'
+    +gridLines+yLabels
+    +makeLine(ptsR,'#00d67e')
+    +makeLine(ptsG,'#ff4f6b')
+    +xLabels+'</svg>';
+}
+
+// ── TOOLTIP ────────────────────────────────────────────────────
+function showTip(e, el){
+  var tip=document.getElementById('tooltip');
+  tip.textContent=el.getAttribute('data-label')+': '+el.getAttribute('data-val');
+  tip.style.display='block';
+  tip.style.left=(e.pageX+10)+'px';
+  tip.style.top=(e.pageY-30)+'px';
+}
+function hideTip(){document.getElementById('tooltip').style.display='none';}
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderDashboard(d){
+  var receita=d.receita||0, gasto=d.gasto||0;
+  var resultado=receita-gasto, pos=resultado>=0;
+  var proj=d.projecao||[], topG=d.topGastos||[], topR=d.topReceitas||[];
+
+  // Gráfico barras gastos por categoria
+  var chartGastos = barChart(topG, '#ff4f6b', 'cat', 'valor');
+
+  // Gráfico barras receitas por categoria
+  var chartReceitas = barChart(topR, '#00d67e', 'cat', 'valor');
+
+  // Gráfico linha evolução mensal
+  var chartLinha = lineChart(proj);
+
+  // Legenda linha
+  var legendaLinha = '<div style="display:flex;gap:16px;margin-top:8px">'
+    +'<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--texto2)"><div style="width:16px;height:2.5px;background:var(--verde);border-radius:2px"></div>Receitas</div>'
+    +'<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--texto2)"><div style="width:16px;height:2.5px;background:var(--verm);border-radius:2px"></div>Gastos</div>'
+    +'<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--texto2)"><div style="width:16px;height:1.5px;background:var(--texto2);border-radius:2px;border-top:1px dashed"></div>Projeção</div>'
+    +'</div>';
+
+  // Ranking helper
+  function rankHTML(items, color) {
+    var maxV=items.length>0?items[0].valor:1;
+    return items.map(function(it,i){
+      var pct=Math.round((it.valor/maxV)*100);
+      var shortCat = it.cat.includes(':') ? it.cat.split(':')[1].trim() : it.cat;
+      return '<div class="rank-row">'
+        +'<div class="rank-num">'+(i+1)+'</div>'
+        +'<div class="rank-nome" title="'+it.cat+'">'+shortCat+'</div>'
+        +'<div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'
+        +'<div class="rank-val" style="color:'+color+'">'+fmt(it.valor)+'</div>'
+      +'</div>';
+    }).join('');
+  }
+
+  document.getElementById('conteudo').innerHTML =
+
+    // ── Resultado ──
+    '<div class="section">'
+    +'<div class="resultado-card">'
+      +'<div><div class="resultado-label">Resultado — '+MESES_FULL[mesAtual]+'</div>'
+      +'<div class="resultado-valor '+(pos?'c-verde':'c-verm')+'">'+fmt(resultado)+'</div></div>'
+      +'<div class="badge '+(pos?'badge-pos':'badge-neg')+'">'+(pos?'▲ Superávit':'▼ Déficit')+'</div>'
+    +'</div>'
+    +'<div class="cards2">'
+      +'<div class="card"><div class="card-label c-verde">Receitas</div><div class="card-val c-verde">'+fmt(receita)+'</div><div class="card-sub">mês atual</div></div>'
+      +'<div class="card"><div class="card-label c-verm">Gastos</div><div class="card-val c-verm">'+fmt(gasto)+'</div><div class="card-sub">mês atual</div></div>'
+    +'</div></div>'
+
+    // ── Gráfico evolução mensal ──
+    +'<div class="section"><div class="section-label">Evolução Mensal '+anoAtual+'</div>'
+    +'<div class="graf-card">'
+      +'<div class="graf-titulo">Receitas vs Gastos</div>'
+      +'<div class="graf-sub">Sólido = real · Tracejado = projeção pela média</div>'
+      +chartLinha+legendaLinha
+    +'</div></div>'
+
+    // ── Gráfico gastos por categoria ──
+    +'<div class="section"><div class="section-label">Gastos por Categoria — '+MESES[mesAtual]+'</div>'
+    +'<div class="graf-card">'
+      +'<div class="graf-titulo">Maiores categorias de gasto</div>'
+      +'<div class="graf-sub">Total: '+fmt(gasto)+'</div>'
+      +chartGastos
+    +'</div>'
+    // Ranking gastos
+    +'<div class="rank-card" style="margin-top:10px">'
+      +'<div class="rank-header"><span class="rank-titulo">Ranking</span><span class="rank-total c-verm">'+fmt(gasto)+'</span></div>'
+      +rankHTML(topG,'#ff4f6b')
+    +'</div></div>'
+
+    // ── Gráfico receitas por categoria ──
+    +'<div class="section"><div class="section-label">Receitas por Categoria — '+MESES[mesAtual]+'</div>'
+    +'<div class="graf-card">'
+      +'<div class="graf-titulo">Maiores fontes de receita</div>'
+      +'<div class="graf-sub">Total: '+fmt(receita)+'</div>'
+      +chartReceitas
+    +'</div>'
+    // Ranking receitas
+    +'<div class="rank-card" style="margin-top:10px">'
+      +'<div class="rank-header"><span class="rank-titulo">Ranking</span><span class="rank-total c-verde">'+fmt(receita)+'</span></div>'
+      +rankHTML(topR,'#00d67e')
+    +'</div></div>'
+
+    +'<div class="updated">Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</div>';
+}
+
+function renderErro(msg){
+  document.getElementById('conteudo').innerHTML='<div class="erro-box">❌ '+msg+'</div>';
+}
+
+jsonp(
+  {tipo:'dashboard', data:anoAtual+'-'+String(mesAtual+1).padStart(2,'0')+'-01'},
+  function(resp){ resp.ok&&resp.dados ? renderDashboard(resp.dados) : renderErro(resp.msg||'Erro ao carregar.'); },
+  function(err){ renderErro(err); }
+);
 </script>
 </body>
 </html>
