@@ -289,9 +289,9 @@ function gaugeRing(pct,color,label){
 function renderDashboard(d, mes){
   // Extrai dados do mês selecionado da projeção
   var proj=d.projecao||[];
-  var mesDados=proj[mes]||{receita:0,gasto:0,real:false};
-  var receita=mesDados.receita||0;
-  var gasto=mesDados.gasto||0;
+  var projMes=proj[mes]||{receita:0,gasto:0,real:false};
+  var receita=projMes.receita||0;
+  var gasto=projMes.gasto||0;
   var resultado=receita-gasto, pos=resultado>=0;
 
   // Top categorias do backend (mês atual) — usa como referência visual
@@ -354,7 +354,7 @@ function renderDashboard(d, mes){
   });
 
   var mesNome=MESES_F[mes]+' '+anoSel;
-  var ehReal=mesDados.real;
+  var ehReal=projMes.real;
 
   document.getElementById('conteudo').innerHTML =
 
