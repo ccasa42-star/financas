@@ -147,8 +147,15 @@ function mudarMes(dir){
 
 popularSelect();
 
-function fmt(v){return 'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmtK(v){if(v>=1000) return 'R$'+(v/1000).toFixed(0)+'k'; return 'R$'+v.toFixed(0);}
+function fmt(v){
+  if(!isFinite(v)||isNaN(v)||v===undefined||v===null) return 'R$ 0,00';
+  return 'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function fmtK(v){
+  if(!isFinite(v)||isNaN(v)||v===undefined||v===null) return 'R$0';
+  if(v>=1000) return 'R$'+(v/1000).toFixed(0)+'k';
+  return 'R$'+v.toFixed(0);
+}
 
 function jsonp(params,ok,err){
   var cb='cb_'+Date.now();
@@ -181,6 +188,7 @@ function sparkline(pts,color){
 }
 
 function donutChart(items,total,r){
+  if(!items||items.length===0||!total||!isFinite(total)||total===0) return '<div style="width:96px;height:96px;display:flex;align-items:center;justify-content:center;color:var(--texto2);font-size:10px">Sem dados</div>';
   r=r||44;var cx=r+4,cy=r+4,sw=r*0.38,circumf=2*Math.PI*(r-sw/2);
   var angle=-Math.PI/2,svgC='';
   items.forEach(function(it,i){
@@ -258,6 +266,7 @@ function lineChart(proj, mesDest){
 }
 
 function barChartV(items){
+  if(!items||items.length===0) return '<p style="color:var(--texto2);font-size:11px;padding:10px 0">Sem dados para este mês</p>';
   var W=320,H=110,pL=36,pB=28,pT=8,pR=8,cW=W-pL-pR,cH=H-pT-pB;
   var maxV=Math.max.apply(null,items.map(function(it){return it.valor;}))||1;
   var bW=Math.max(8,Math.floor(cW/items.length)-6);
@@ -306,6 +315,7 @@ function renderDashboard(d, mes){
   // Participação anual
   var totalGastoAno=0; proj.forEach(function(m){if(m.real) totalGastoAno+=m.gasto||0;});
   var rings='';
+  if(topG.length===0) rings='<p style="color:var(--texto2);font-size:11px">Sem dados para este mês</p>';
   topG.slice(0,5).forEach(function(it,i){
     var pct=totalGastoAno>0?it.valor/totalGastoAno:0;
     var short=it.cat.split(':').pop().trim();
@@ -315,10 +325,10 @@ function renderDashboard(d, mes){
   // Donut gastos
   var donutG='',donutLegG='';
   if(topG.length>0){
-    donutG=donutChart(topG,gasto||topG.reduce(function(a,b){return a+b.valor;},0));
+    var totalG=gasto||topG.reduce(function(a,b){return a+b.valor;},0)||1;
+    donutG=donutChart(topG,totalG);
     topG.slice(0,4).forEach(function(it,i){
-      var tot=gasto||topG.reduce(function(a,b){return a+b.valor;},0);
-      var pct=tot>0?Math.round(it.valor/tot*100):0;
+      var pct=totalG>0&&isFinite(it.valor/totalG)?Math.round(it.valor/totalG*100):0;
       donutLegG+='<div class="leg-row"><div class="leg-dot" style="background:'+CORES[i]+'"></div>'
         +'<div class="leg-name">'+it.cat.split(':').pop().trim()+'</div><div class="leg-pct">'+pct+'%</div></div>';
     });
@@ -327,10 +337,10 @@ function renderDashboard(d, mes){
   // Donut receitas
   var donutR='',donutLegR='';
   if(topR.length>0){
-    donutR=donutChart(topR,receita||topR.reduce(function(a,b){return a+b.valor;},0));
+    var totalR=receita||topR.reduce(function(a,b){return a+b.valor;},0)||1;
+    donutR=donutChart(topR,totalR);
     topR.slice(0,4).forEach(function(it,i){
-      var tot=receita||topR.reduce(function(a,b){return a+b.valor;},0);
-      var pct=tot>0?Math.round(it.valor/tot*100):0;
+      var pct=totalR>0&&isFinite(it.valor/totalR)?Math.round(it.valor/totalR*100):0;
       donutLegR+='<div class="leg-row"><div class="leg-dot" style="background:'+CORES[i]+'"></div>'
         +'<div class="leg-name">'+it.cat+'</div><div class="leg-pct">'+pct+'%</div></div>';
     });
@@ -338,7 +348,7 @@ function renderDashboard(d, mes){
 
   // Barras horizontais
   var hbars='';
-  var maxHB=topG.length>0?topG[0].valor:1;
+  var maxHB=topG.length>0&&topG[0].valor>0?topG[0].valor:1;
   topG.slice(0,6).forEach(function(it,i){
     var pct=Math.round((it.valor/maxHB)*100);
     hbars+='<div class="hbar-row">'
